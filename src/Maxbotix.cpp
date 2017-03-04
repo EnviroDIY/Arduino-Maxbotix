@@ -5,11 +5,16 @@ Maxbotix::Maxbotix(uint8_t pin, MAXBOTIX_INPUT_t input, MAXBOTIX_MODEL_t model, 
     pin(pin), input(input), model(model), filter(filter), sample_size(sample_size)
 {
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-
-    if (input == TX) {
-        serial = new RxSoftwareSerial(pin, true);
-        ((RxSoftwareSerial*)serial)->begin(9600);
-    } else {
+    if (input == TTL) {
+        serial = new SoftwareSerial(pin, -1, false);
+        ((SoftwareSerial*)serial)->begin(9600);
+        serial->setTimeout(180);
+    }
+    else if (input == RS232) {
+        serial = new SoftwareSerial(pin, -1, true);
+        ((SoftwareSerial*)serial)->begin(9600);
+        serial->setTimeout(180);
+    }  else {
 #endif
         pinMode(pin, INPUT);
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
@@ -21,7 +26,7 @@ Maxbotix::Maxbotix(uint8_t pin, MAXBOTIX_INPUT_t input, MAXBOTIX_MODEL_t model, 
 
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
 Maxbotix::Maxbotix(Stream* serial, MAXBOTIX_MODEL_t model, MAXBOTIX_FILTER_t filter, uint8_t sample_size) :
-    input(TX), model(model), serial(serial), filter(filter), sample_size(sample_size)
+    input(RS232), model(model), serial(serial), filter(filter), sample_size(sample_size)
 {
     init();
 }
@@ -185,18 +190,18 @@ float Maxbotix::readSensor()
         break;
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
 
-    case TX:
+    case RS232:
         switch (model) {
         case LV:
-            result = toCentimeters(readSensorSerial(3));
+            result = toCentimeters(readSensorSerial());
             break;
 
         case XL:
-            result = readSensorSerial(3);
+            result = readSensorSerial();
             break;
 
         case HRLV:
-            result = readSensorSerial(4) / 10.0;
+            result = readSensorSerial() / 10.0;
             break;
 
         default:
@@ -213,23 +218,11 @@ float Maxbotix::readSensor()
     return result;
 }
 
-unsigned short Maxbotix::readSensorSerial(uint8_t length)
+unsigned short Maxbotix::readSensorSerial(void)
 {
-    char buffer[length];
-
-    // flush and wait for a range reading
-    serial->flush();
-
-    while (!serial->available() || serial->read() != 'R');
-
-    // read the range
-    for (int i = 0; i < length; i++) {
-        while (!serial->available());
-
-        buffer[i] = serial->read();
-    }
-
-    return atoi(buffer);
+    unsigned short result = serial->parseInt();
+    serial->read();  // To throw away the carriage return
+    return result;
 }
 
 void Maxbotix::readSample()

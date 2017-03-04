@@ -25,7 +25,7 @@ public:
         PW,
         AN,
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-        TX
+        TTL
         RS232
 #endif
     }
@@ -111,7 +111,7 @@ private:
     float* sample;
     void init();
     float readSensor();
-    unsigned short readSensorSerial(uint8_t length);
+    unsigned short readSensorSerial(void);
     void pushToSample(float value);
     void sortSample();
 };

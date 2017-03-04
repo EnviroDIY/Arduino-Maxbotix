@@ -4,7 +4,7 @@
   Instructions:
   - At least one of: (comment the appropriate code below)
     * PW is digital pin 8
-    * TX is digital pin 6
+    * RS232 is digital pin 6
     * AN is analog pin A0
   - Change code below according to your model (LV, XL and
   HRLV supported)
@@ -19,7 +19,7 @@
 
 Maxbotix rangeSensorPW(8, Maxbotix::PW, Maxbotix::LV);
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-  Maxbotix rangeSensorTX(6, Maxbotix::TX, Maxbotix::LV);
+  Maxbotix rangeSensorRS232(6, Maxbotix::RS232, Maxbotix::LV);
 #endif
 Maxbotix rangeSensorAD(A0, Maxbotix::AN, Maxbotix::LV);
 
@@ -42,10 +42,10 @@ void loop()
   Serial.print(millis() - start);
   Serial.println("ms");
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-  // TX
+  // RS232
   start = millis();
-  Serial.print("TX: ");
-  Serial.print(rangeSensorTX.getRange());
+  Serial.print("RS232: ");
+  Serial.print(rangeSensorRS232.getRange());
   Serial.print("cm - ");
   Serial.print(millis() - start);
   Serial.println("ms");

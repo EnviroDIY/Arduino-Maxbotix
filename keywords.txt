@@ -22,7 +22,8 @@ XL                 	LITERAL1
 HRLV               	LITERAL1
 PW                 	LITERAL1
 AN                 	LITERAL1
-TX                	LITERAL1
+TTL              	LITERAL1
+RS232              	LITERAL1
 NONE               	LITERAL1
 MEDIAN             	LITERAL1
 HIGHEST_MODE       	LITERAL1

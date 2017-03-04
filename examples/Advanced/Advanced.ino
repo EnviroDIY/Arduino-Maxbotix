@@ -22,7 +22,7 @@
 Maxbotix rangeSensorPW(8, Maxbotix::PW, Maxbotix::LV, Maxbotix::BEST);
 
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-  Maxbotix rangeSensorTX(6, Maxbotix::TX, Maxbotix::LV, Maxbotix::MEDIAN);
+  Maxbotix rangeSensorRS232(6, Maxbotix::RS232, Maxbotix::LV, Maxbotix::MEDIAN);
 #endif
 
 Maxbotix rangeSensorAD(A0, Maxbotix::AN, Maxbotix::LV, Maxbotix::BEST, 9);
@@ -59,22 +59,22 @@ void loop()
   Serial.println();
   
   #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-    // TX
+    // RS232
     start = millis();
-    Serial.print("TX (MEDIAN): ");
-    Serial.print(rangeSensorTX.getRange());
+    Serial.print("RS232 (MEDIAN): ");
+    Serial.print(rangeSensorRS232.getRange());
     Serial.print("cm - ");
     Serial.print(millis() - start);
     Serial.print("ms - ");
-    printArray(rangeSensorTX.getSample(), rangeSensorTX.getSampleSize());
+    printArray(rangeSensorRS232.getSample(), rangeSensorRS232.getSampleSize());
     Serial.print(" - Highest Mode: ");
-    Serial.print(rangeSensorTX.getSampleMode(true));
+    Serial.print(rangeSensorRS232.getSampleMode(true));
     Serial.print(" - Lowest Mode: ");
-    Serial.print(rangeSensorTX.getSampleMode(false));
+    Serial.print(rangeSensorRS232.getSampleMode(false));
     Serial.print(" - Median: ");
-    Serial.print(rangeSensorTX.getSampleMedian());
+    Serial.print(rangeSensorRS232.getSampleMedian());
     Serial.print(" - Best: ");
-    Serial.print(rangeSensorTX.getSampleBest());
+    Serial.print(rangeSensorRS232.getSampleBest());
     Serial.println();
   #endif
   
