@@ -60,7 +60,6 @@ void Maxbotix::init()
 Maxbotix::~Maxbotix()
 {
     delete[] sample;
-    delete serial;
 }
 
 float Maxbotix::getRange()
@@ -121,7 +120,7 @@ float Maxbotix::getSampleMode(bool highest)
 
         if (sample[i] == mode)
             mode_count++;
-        else if (!highest && count > mode_count || highest && count == mode_count) {
+        else if ((!highest && count > mode_count) || (highest && count == mode_count)) {
             mode_count = count;
             mode = sample[i];
         }
@@ -155,7 +154,7 @@ float Maxbotix::readSensor()
             result = pulseIn(pin, HIGH) / 58.0;
             break;
 
-        case HRLV:
+        case HR:
             result = pulseIn(pin, HIGH) / 10.0;
             break;
 
@@ -175,7 +174,7 @@ float Maxbotix::readSensor()
             result = analogRead(pin);
             break;
 
-        case HRLV:
+        case HR:
             result = analogRead(pin) * 5.0 / 10.0;
             break;
 

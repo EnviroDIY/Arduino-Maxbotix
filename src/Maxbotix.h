@@ -6,7 +6,7 @@
 
 #include <Arduino.h>
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
-#include "RxSoftwareSerial.h"
+#include "SoftwareSerial_PCINT12.h"
 #endif
 
 class Maxbotix
@@ -14,9 +14,9 @@ class Maxbotix
 public:
     // models
     typedef enum {
-        LV,
-        XL,
-        HRLV
+        LV,  /*includes all of the LV sensors that measure in inches*/
+        XL,  /*includes all of the XL sensors that measure in centimeters*/
+        HR  /*includes all of the XL sensors that measure in millimeters*/
     }
     MAXBOTIX_MODEL_t;
 
@@ -26,6 +26,7 @@ public:
         AN,
 #ifdef MAXBOTIX_WITH_SOFTWARE_SERIAL
         TX
+        RS232
 #endif
     }
     MAXBOTIX_INPUT_t;
